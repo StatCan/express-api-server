@@ -1,7 +1,7 @@
 const express = require('express');
-const { APIError, DataError } = require('./errors');
+const {APIError, DataError} = require('./errors');
 
-const setup_endpoint = (fn, router) => {
+const setupEndpoint = (fn, router) => {
 	if (typeof fn === 'function') {
 		fn(router);
 	}
@@ -9,16 +9,16 @@ const setup_endpoint = (fn, router) => {
 
 module.exports = function(endpoints, options = {port: 8000}) {
 	const app = express();
-	const router = express.Router();
+	const router = new express.Router();
 
 	router.use((req, res, next) => next());
 
 	if (Array.isArray(endpoints)) {
 		for (const endpoint of endpoints) {
-			setup_endpoint(endpoint, router);
+			setupEndpoint(endpoint, router);
 		}
 	} else {
-		setup_endpoint(endpoints, router);
+		setupEndpoint(endpoints, router);
 	}
 
 	app.use('/', router);
@@ -29,7 +29,7 @@ module.exports = function(endpoints, options = {port: 8000}) {
 				process.stderr.write(`Error: ${err.message} (URL: ${req.url})\n`);
 
 			return res.status(err.status).json({
-				errors:[
+				errors: [
 					{
 						title: err.message
 					}
@@ -53,4 +53,4 @@ module.exports = function(endpoints, options = {port: 8000}) {
 		app,
 		router
 	};
-}
+};

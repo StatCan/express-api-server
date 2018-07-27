@@ -1,9 +1,10 @@
 {
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "plugin:node/recommended", "google"],
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"
@@ -24,6 +25,11 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-tabs": 0,
+        "curly": 0,
+        "comma-dangle": 0,
+        "max-len": 0,
+        "require-jsdoc": 0
     }
 }
