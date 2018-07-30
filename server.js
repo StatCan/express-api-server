@@ -1,5 +1,5 @@
 const express = require('express');
-const {APIError, DataError} = require('./errors');
+const {APIError, RequestError, DataError} = require('./errors');
 
 const setupEndpoint = (fn, router) => {
 	if (typeof fn === 'function') {
@@ -22,6 +22,10 @@ module.exports = function(endpoints, options = {port: 8000}) {
 	}
 
 	app.use('/', router);
+
+	app.get('/:endpoint*', (req, res, next) => {
+		next(new RequestError(req, 404, `Endpoint '${req.params.endpoint}' not found`));
+	});
 
 	app.use((err, req, res, next) => {
 		if (err instanceof APIError) {
