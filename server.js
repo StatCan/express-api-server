@@ -56,7 +56,9 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 	};
 
 	if (Raven) {
-		Raven.config(options.sentryDSN).install();
+		Raven.config(options.sentryDSN, {
+			transport: new (require('./ravenproxytransport'))()
+		}).install();
 		app.use(Raven.requestHandler());
 	}
 
