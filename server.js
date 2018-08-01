@@ -19,26 +19,27 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 
 		app.use((err, req, res, next) => {
 			if (err instanceof APIError) {
-				if (err instanceof DataError)
-					process.stderr.write(`${req.url}\n${err.stack}\n`);
-
-				return res.status(err.status).jsonp({
+				res.status(err.status).jsonp({
 					errors: [
 						{
 							title: err.message
 						}
 					]
 				});
+			} else {
+				res.status(500).jsonp({
+					errors: [
+						{
+							title: 'Unknown Internal Server Error'
+						}
+					]
+				});
 			}
-			process.stderr.write(`${req.url}\n${err.stack}\n`);
-			res.status(500).jsonp({
-				errors: [
-					{
-						title: 'Unknown Internal Server Error'
-					}
-				]
-			});
-			next();
+
+			if (err instanceof DataError || err instanceof APIError === false)
+				process.stderr.write(`${req.url}\n${err.stack}\n`);
+
+			res.end();
 		});
 
 		return app.listen(options.port);
