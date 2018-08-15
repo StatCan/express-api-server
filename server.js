@@ -6,6 +6,10 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 	const app = express();
 	const router = new express.Router();
 	const urlResolver = new UrlResolver(options.urlRoot || '');
+	const Raven = (() => {
+		if (options.sentryDSN)
+			return require('raven');
+	})();
 	const endpoints = [];
 	const start = () => {
 		router.use((req, res, next) => {
@@ -18,6 +22,10 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 		app.get('/:endpoint*', (req, res, next) => {
 			next(new RequestError(req, 404, `Endpoint '${req.params.endpoint}' not found`));
 		});
+
+		if (Raven) {
+			app.use(Raven.errorHandler());
+		}
 
 		app.use((err, req, res, next) => {
 			if (err instanceof APIError) {
@@ -46,6 +54,11 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 
 		return app.listen(options.port);
 	};
+
+	if (Raven) {
+		Raven.config(options.sentryDSN).install();
+		app.use(Raven.requestHandler());
+	}
 
 	router.use((req, res, next) => next());
 
