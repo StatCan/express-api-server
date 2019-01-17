@@ -7,7 +7,7 @@
     "start": "node server.js",
     "test": "npm run test-lint && npm run test-unit",
     "test-lint": "npx eslint --ext .js .",
-    "test-unit": "npx mocha test/"
+    "test-unit": "npx mocha test/ --require test/_mocha_clifix.js"
   },
   "author": "",
   "license": "MIT",
