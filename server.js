@@ -10,6 +10,37 @@ const setupEndpoint = (fn, router) => {
 module.exports = function(endpoints, options = {port: 8000}) {
 	const app = express();
 	const router = new express.Router();
+	const start = () => {
+		app.get('/:endpoint*', (req, res, next) => {
+			next(new RequestError(req, 404, `Endpoint '${req.params.endpoint}' not found`));
+		});
+
+		app.use((err, req, res, next) => {
+			if (err instanceof APIError) {
+				if (err instanceof DataError)
+					process.stderr.write(`Error: ${err.message} (URL: ${req.url})\n`);
+
+				return res.status(err.status).json({
+					errors: [
+						{
+							title: err.message
+						}
+					]
+				});
+			}
+			process.stderr.write(`${req.url}\nError: ${err.stack}\n`);
+			res.status(500).json({
+				errors: [
+					{
+						title: 'Unknown Internal Server Error'
+					}
+				]
+			});
+			next(err);
+		});
+
+		return app.listen(options.port);
+	};
 
 	router.use((req, res, next) => next());
 
@@ -23,38 +54,9 @@ module.exports = function(endpoints, options = {port: 8000}) {
 
 	app.use('/', router);
 
-	app.get('/:endpoint*', (req, res, next) => {
-		next(new RequestError(req, 404, `Endpoint '${req.params.endpoint}' not found`));
-	});
-
-	app.use((err, req, res, next) => {
-		if (err instanceof APIError) {
-			if (err instanceof DataError)
-				process.stderr.write(`Error: ${err.message} (URL: ${req.url})\n`);
-
-			return res.status(err.status).json({
-				errors: [
-					{
-						title: err.message
-					}
-				]
-			});
-		}
-		process.stderr.write(`${req.url}\nError: ${err.stack}\n`);
-		res.status(500).json({
-			errors: [
-				{
-					title: 'Unknown Internal Server Error'
-				}
-			]
-		});
-		next(err);
-	});
-
-	app.listen(options.port);
-
 	return {
 		app,
-		router
+		router,
+		start
 	};
 };
