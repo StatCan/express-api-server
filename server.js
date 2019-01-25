@@ -20,7 +20,7 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 		app.use((err, req, res, next) => {
 			if (err instanceof APIError) {
 				if (err instanceof DataError)
-					process.stderr.write(`Error: ${err.message} (URL: ${req.url})\n`);
+					process.stderr.write(`${req.url}\n${err.stack}\n`);
 
 				return res.status(err.status).jsonp({
 					errors: [
@@ -30,7 +30,7 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 					]
 				});
 			}
-			process.stderr.write(`${req.url}\nError: ${err.stack}\n`);
+			process.stderr.write(`${req.url}\n${err.stack}\n`);
 			res.status(500).jsonp({
 				errors: [
 					{
