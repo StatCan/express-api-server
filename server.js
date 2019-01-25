@@ -1,9 +1,11 @@
 const express = require('express');
 const {APIError, RequestError, DataError} = require('./errors');
+const UrlResolver = require('./helpers/url');
 
 module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 	const app = express();
 	const router = new express.Router();
+	const urlResolver = new UrlResolver(options.urlRoot || '');
 	const endpoints = [];
 	const start = () => {
 		router.use((req, res, next) => {
@@ -54,7 +56,7 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 					type: 'endpoint',
 					id: endpoint,
 					links: {
-						self: `/${endpoint}`
+						self: urlResolver.resolve(`/${endpoint}`)
 					}
 				};
 			})
@@ -66,7 +68,7 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 		endpoints.push(endpointName);
 		for (const [routePath, routeFn] of Object.entries(route)) {
 			if (routeFn && typeof routeFn === 'function') {
-				routeFn(router.route(`/${endpointName}/${routePath.replace(/^\/*/, '')}`.replace(/\/*$/, '')));
+				routeFn(router.route(`/${endpointName}/${routePath.replace(/^\/*/, '')}`.replace(/\/*$/, '')), urlResolver);
 			}
 		}
 	}
