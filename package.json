@@ -15,8 +15,8 @@
     "node": ">=8.3.0"
   },
   "dependencies": {
+    "@sentry/node": "^4.5.3",
     "express": "^4.16.3",
-    "raven": "^2.6.3",
     "request": "^2.87.0"
   },
   "devDependencies": {
