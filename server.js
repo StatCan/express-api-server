@@ -20,7 +20,8 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 		});
 
 		app.get('/:endpoint*', (req, res, next) => {
-			next(new RequestError(req, 404, `Endpoint '${req.params.endpoint}' not found`));
+			if (!endpoints.includes(req.params.endpoint))
+				next(new RequestError(req, 404, `Endpoint '${req.params.endpoint}' not found`));
 		});
 
 		if (Sentry) {
