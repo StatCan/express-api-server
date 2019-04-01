@@ -1,20 +1,20 @@
 # express-api-server #
 
-A module for quickly creating JSON APIs built on [express.js](https://expressjs.com/)
+Un module pour rapidement créer des API en JSON bâti en utilisant [express.js](https://expressjs.com/)
 
-## Getting Started ##
+## Démarrage ##
 
-### Prerequisites ###
+### Prérequis ###
 
 * Node >= 8
 
-### Installing ###
+### Installation ###
 
 ```
 $ npm install express-api-server
 ```
 
-### Example ###
+### Exemple ###
 
 ```javascript
 // index.js
@@ -71,22 +71,22 @@ module.exports = {
 
 Type: `Integer`
 
-This option specifies on which port to listen for API calls.
+Cette option spécifie le port à écouter pour les appels a l'API.
 
 #### urlRoot ####
 
 Type `String`
 
-This option specifies the root URL to use when creating fully qualified URLs (for pagination for example).
+Cette option spécifie l'URL de base à utiliser pour créer des URLs complètement qualifiés (ex: pour la pagination).
 
-Each API route provide access to a `urlResolver` for creating fully qualified URLs using the provided root (e.g. `urlResolver.resolve('/people/2')`.
+Chaque route d'API donne accès a un `urlResolver` pour créer des URLs complètement qualifiés en utilisant l'URL de base fourni (ex:. `urlResolver.resolve('/people/2')`.
 
 #### sentryDSN ####
 
 Type: `String`
 
-This option enables logging server errors in the API to a [sentry](https://sentry.io/) instance.
+Cette option active l'enregistrement des erreurs de serveur de l'API vers une instance de[sentry](https://sentry.io/).
 
 ## License ##
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Ce project est sous licence MIT - voir le fichier [LICENSE-fr.md](LICENSE-fr.md) pour plus de détails.
