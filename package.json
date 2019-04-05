@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@sentry/node": "^4.5.3",
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "request": "^2.87.0"
   },

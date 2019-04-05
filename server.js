@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const {APIError, RequestError, DataError} = require('./errors');
 const UrlResolver = require('./helpers/url');
 
@@ -85,6 +86,8 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 			}
 		}
 	}
+
+	app.use(cors());
 
 	app.use('/', router);
 
