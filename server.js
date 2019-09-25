@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const {APIError, RequestError, DataError} = require('./errors');
 const UrlResolver = require('./helpers/url');
 
@@ -86,6 +87,8 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 			}
 		}
 	}
+
+	app.use(compression(options.compression));
 
 	app.use(cors());
 
