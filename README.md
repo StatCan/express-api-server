@@ -1,5 +1,7 @@
 # express-api-server #
 
+[![Build Status](https://travis-ci.org/StatCan/express-api-server.svg?branch=master)](https://travis-ci.org/StatCan/express-api-server)
+
 A module for quickly creating JSON APIs built on [express.js](https://expressjs.com/)
 
 ## Getting Started ##
