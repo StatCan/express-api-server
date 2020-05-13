@@ -39,6 +39,10 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 			if (err instanceof APIError) {
 				status = err.status;
 				message.errors[0].title = err.message;
+			} else if (err instanceof SyntaxError && err.type && err.type === 'entity.parse.failed') {
+				// Invalid JSON body
+				status = 400;
+				message.errors[0].title = 'Invalid JSON body'
 			} else {
 				status = 500;
 				message.errors[0].title = 'Unknown Internal Server Error';
@@ -91,6 +95,8 @@ module.exports = function(endpointsObject = {}, options = {port: 8000}) {
 	app.use(compression(options.compression));
 
 	app.use(cors());
+
+	app.use(express.json())
 
 	app.use('/', router);
 
